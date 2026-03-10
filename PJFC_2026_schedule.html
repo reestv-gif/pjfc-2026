@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PJFC U13s 2026 — Parent Roles</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #152242;
+    --navy-light: #1e3160;
+    --gold: #f5a623;
+    --gold-light: #ffd27a;
+    --white: #ffffff;
+    --off-white: #f0f4ff;
+    --muted: #8a9cc2;
+    --card: #162040;
+    --pill-bg: #1e3160;
+    --highlight: #f5a62322;
+    --border: #2a4070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 28px 32px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .club-badge {
+    width: 52px;
+    height: 52px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--white);
+  }
+
+  h1 span { color: var(--gold); }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* SEARCH + FILTERS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 10px 12px 10px 38px;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input[type="text"]::placeholder { color: var(--muted); }
+  input[type="text"]:focus { border-color: var(--gold); }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--navy-mid);
+    border-radius: 8px;
+    padding: 4px;
+  }
+
+  .tab-btn {
+    padding: 7px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  /* MAIN CONTENT */
+  main {
+    padding: 24px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* BY DATE VIEW */
+  .rounds-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .round-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .round-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .round-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: var(--navy-light);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .round-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+    min-width: 60px;
+  }
+
+  .round-date {
+    font-size: 0.95rem;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .final-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .chevron {
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .round-card.open .chevron { transform: rotate(180deg); }
+
+  .roles-table {
+    display: none;
+    padding: 16px 20px;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .round-card.open .roles-table { display: flex; }
+
+  .role-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .role-row:last-child { border-bottom: none; }
+
+  .role-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    padding-top: 2px;
+  }
+
+  .role-person {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--off-white);
+  }
+
+  .tbc { color: var(--muted); font-style: italic; font-weight: 300; }
+
+  /* BY PARENT VIEW */
+  .parents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .parent-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .parent-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .parent-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--navy-light);
+  }
+
+  .parent-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+
+  .parent-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .role-count {
+    margin-left: auto;
+    background: var(--navy);
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--gold);
+  }
+
+  .parent-roles-list {
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .parent-role-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .role-pill {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--pill-bg);
+    color: var(--off-white);
+    white-space: nowrap;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .date-chip {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* BY ROLE VIEW */
+  .roles-list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .role-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .role-section-header {
+    padding: 14px 20px;
+    background: var(--navy-light);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+  }
+
+  .role-assignments {
+    padding: 16px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .assignment-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+  }
+
+  .assignment-chip .r-num {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  .no-results {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 20px;
+    font-size: 0.9rem;
+  }
+
+  /* Highlight for search */
+  mark {
+    background: var(--gold-light);
+    color: var(--navy);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 20px 16px 14px; }
+    main { padding: 16px; }
+    .role-row { grid-template-columns: 150px 1fr; }
+    h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="club-badge">PJFC</div>
+    <div>
+      <h1>U13s <span>2026</span> — Parent Roles</h1>
+      <div class="subtitle">Season Schedule · 14 Rounds + Finals</div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search by name or role…">
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="setView('date')">By Date</button>
+      <button class="tab-btn" onclick="setView('parent')">By Parent</button>
+      <button class="tab-btn" onclick="setView('role')">By Role</button>
+    </div>
+  </div>
+</header>
+
+<main id="mainContent"></main>
+
+<script>
+const data = [
+  { round: "R1", date: "19th April", isFinal: false, roles: {
+    "Trainer": "Bec Oostermeyer", "Timekeeper / Scoreboard": "Jo Rolfe", "Ground Manager": "Natasha Rees",
+    "Parent Votes & Snack": "Kate Phillips", "Goal Umpire": "Nick Tischler",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Fleur Warburton",
+    "Goal & Point Score Keeper": "Lou McKenzie", "Backup Runner": "James Trescowthick"
+  }},
+  { round: "R2", date: "26th April", isFinal: false, roles: {
+    "Trainer": "Trent Perry", "Timekeeper / Scoreboard": "Stephen Wilmot", "Ground Manager": "Varun Bhargava",
+    "Parent Votes & Snack": "Ollie Oostermeyer", "Goal Umpire": "Claudia DiBella",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Kate Gurney",
+    "Goal & Point Score Keeper": "Vic Dupuche", "Backup Runner": "Sam Rolfe"
+  }},
+  { round: "R3", date: "3rd May", isFinal: false, roles: {
+    "Trainer": "Sonia Fankhauser", "Timekeeper / Scoreboard": "Sonia Le", "Ground Manager": "James Trescowthic",
+    "Parent Votes & Snack": "Sarah Eager", "Goal Umpire": "Peter Chighine",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Dallas Wilmot",
+    "Goal & Point Score Keeper": "Lesley Bartlett", "Backup Runner": "Ollie Oostermeyer"
+  }},
+  { round: "R4", date: "10th May", isFinal: false, roles: {
+    "Trainer": "Nick Critchley", "Timekeeper / Scoreboard": "Nicki Clark", "Ground Manager": "Lisa Knott",
+    "Parent Votes & Snack": "Natasha Rees", "Goal Umpire": "Trent Warburton",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Lou McKenzie",
+    "Goal & Point Score Keeper": "Jo Rolfe", "Backup Runner": "Claudia DiBella"
+  }},
+  { round: "R5", date: "17th May", isFinal: false, roles: {
+    "Trainer": "Bec Oostermeyer", "Timekeeper / Scoreboard": "Kate Phillips", "Ground Manager": "Nick Tischler",
+    "Parent Votes & Snack": "Luke Brown", "Goal Umpire": "Sam Wright",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Varun Bhargava",
+    "Goal & Point Score Keeper": "Leigh Mollison", "Backup Runner": "James Trescowthick"
+  }},
+  { round: "R6", date: "24th May", isFinal: false, roles: {
+    "Trainer": "Trent Perry", "Timekeeper / Scoreboard": "Alex McKenzie", "Ground Manager": "Kate Gurney",
+    "Parent Votes & Snack": "Fleur Warburton", "Goal Umpire": "Stephen Wilmot",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Madelin Critchley",
+    "Goal & Point Score Keeper": "Claudia DiBella", "Backup Runner": "Sam Rolfe"
+  }},
+  { round: "R7", date: "31st May", isFinal: false, roles: {
+    "Trainer": "Sonia Fankhauser", "Timekeeper / Scoreboard": "Varun Bhargava", "Ground Manager": "Sonia Le",
+    "Parent Votes & Snack": "James Trescowthick", "Goal Umpire": "Dean Fanning",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Lesley Bartlett",
+    "Goal & Point Score Keeper": "Dallas Wilmot", "Backup Runner": "Ollie Oostermeyer"
+  }},
+  { round: "R8", date: "14th June", isFinal: false, roles: {
+    "Trainer": "Nick Critchley", "Timekeeper / Scoreboard": "Sarah Eager", "Ground Manager": "Jo Rolfe",
+    "Parent Votes & Snack": "Vic Dupuche", "Goal Umpire": "Natasha Rees",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Kate Mollison",
+    "Goal & Point Score Keeper": "Alex McKenzie", "Backup Runner": "Claudia DiBella"
+  }},
+  { round: "R9", date: "21st June", isFinal: false, roles: {
+    "Trainer": "Bec Oostermeyer", "Timekeeper / Scoreboard": "Nick Tischler", "Ground Manager": "Trent Warburton",
+    "Parent Votes & Snack": "Nicki Clark", "Goal Umpire": "Kate Phillips",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Lisa Knott",
+    "Goal & Point Score Keeper": "Sam Wright", "Backup Runner": "James Trescowthick"
+  }},
+  { round: "R10", date: "12th July", isFinal: false, roles: {
+    "Trainer": "Trent Perry", "Timekeeper / Scoreboard": "Claudia DiBella", "Ground Manager": "Madelin Critchley",
+    "Parent Votes & Snack": "Kate Gurney", "Goal Umpire": "Alex McKenzie",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Stephen Wilmot",
+    "Goal & Point Score Keeper": "Sonja Roberts", "Backup Runner": "Sam Rolfe"
+  }},
+  { round: "R11", date: "19th July", isFinal: false, roles: {
+    "Trainer": "Sonia Fankhauser", "Timekeeper / Scoreboard": "Leigh Mollison", "Ground Manager": "Sam Wright",
+    "Parent Votes & Snack": "Varun Bhargava", "Goal Umpire": "James Trescowthick",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Clare Perry",
+    "Goal & Point Score Keeper": "Peter Chighine", "Backup Runner": "Ollie Oostermeyer"
+  }},
+  { round: "R12", date: "26th July", isFinal: false, roles: {
+    "Trainer": "Nick Critchley", "Timekeeper / Scoreboard": "Luke Brown", "Ground Manager": "Nicki Clark",
+    "Parent Votes & Snack": "Lesley Bartlett", "Goal Umpire": "Ollie Oostermeyer",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Jo Rolfe",
+    "Goal & Point Score Keeper": "Fleur Warburton", "Backup Runner": "Claudia DiBella"
+  }},
+  { round: "R13", date: "2nd August", isFinal: false, roles: {
+    "Trainer": "Bec Oostermeyer", "Timekeeper / Scoreboard": "Vic Dupuche", "Ground Manager": "Stephen Wilmot",
+    "Parent Votes & Snack": "Lou McKenzie", "Goal Umpire": "Sarah Eager",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "Kate Phillips",
+    "Goal & Point Score Keeper": "Kate Gurney", "Backup Runner": "James Trescowthick"
+  }},
+  { round: "R14", date: "9th August", isFinal: false, roles: {
+    "Trainer": "Trent Perry", "Timekeeper / Scoreboard": "Trent Warburton", "Ground Manager": "Claudia DiBella",
+    "Parent Votes & Snack": "Nick Tischler", "Goal Umpire": "Luke Brown",
+    "Runner": "Stew Eager / Scott Nugent", "Umpire Escort": "James Trescowthick",
+    "Goal & Point Score Keeper": "Natasha Rees", "Backup Runner": "Sam Rolfe"
+  }},
+  { round: "Final 1", date: "16th August", isFinal: true, roles: {
+    "Trainer": "Sonia Fankhauser", "Runner": "Stew Eager / Scott Nugent", "Backup Runner": "Ollie Oostermeyer"
+  }},
+  { round: "Final 2", date: "23rd August", isFinal: true, roles: {
+    "Trainer": "Nick Critchley", "Runner": "Stew Eager / Scott Nugent", "Backup Runner": "Claudia Di Bella"
+  }},
+  { round: "Final 3", date: "30th August", isFinal: true, roles: {
+    "Trainer": "Bec Oostermeyer", "Runner": "Stew Eager / Scott Nugent", "Backup Runner": "James Trescowthick"
+  }},
+];
+
+let currentView = 'date';
+let searchTerm = '';
+
+function setView(v) {
+  currentView = v;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['date','parent','role'][i] === v);
+  });
+  render();
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  render();
+});
+
+function hl(text) {
+  if (!searchTerm) return text;
+  const re = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function matchesSearch(round) {
+  if (!searchTerm) return true;
+  if (round.round.toLowerCase().includes(searchTerm)) return true;
+  if (round.date.toLowerCase().includes(searchTerm)) return true;
+  return Object.entries(round.roles).some(([k,v]) =>
+    k.toLowerCase().includes(searchTerm) || v.toLowerCase().includes(searchTerm)
+  );
+}
+
+function render() {
+  const el = document.getElementById('mainContent');
+  const filtered = data.filter(matchesSearch);
+  if (currentView === 'date') renderDate(el, filtered);
+  else if (currentView === 'parent') renderParent(el, filtered);
+  else renderRole(el, filtered);
+}
+
+function renderDate(el, filtered) {
+  if (!filtered.length) { el.innerHTML = '<div class="no-results">No results found.</div>'; return; }
+  el.innerHTML = '<div class="rounds-grid" id="roundsGrid"></div>';
+  const grid = document.getElementById('roundsGrid');
+  filtered.forEach((round, i) => {
+    const card = document.createElement('div');
+    card.className = 'round-card';
+    const rolesHtml = Object.entries(round.roles).map(([role, person]) => {
+      const isTBC = person === 'TBC';
+      return `<div class="role-row">
+        <div class="role-label">${hl(role)}</div>
+        <div class="role-person ${isTBC ? 'tbc' : ''}">${isTBC ? 'TBC' : hl(person)}</div>
+      </div>`;
+    }).join('');
+    card.innerHTML = `
+      <div class="round-header" onclick="toggleCard(this)">
+        <div class="round-number">${hl(round.round)}</div>
+        <div class="round-date">${hl(round.date)}</div>
+        ${round.isFinal ? '<span class="final-badge">Final</span>' : ''}
+        <svg class="chevron" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="roles-table">${rolesHtml}</div>
+    `;
+    if (searchTerm) card.classList.add('open');
+    grid.appendChild(card);
+  });
+}
+
+function toggleCard(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function renderParent(el, filtered) {
+  // Build parent → assignments map
+  const parents = {};
+  filtered.forEach(round => {
+    Object.entries(round.roles).forEach(([role, person]) => {
+      if (person === 'TBC') return;
+      // Handle multiple people (e.g. runners)
+      const people = person.split(' / ');
+      people.forEach(p => {
+        p = p.trim();
+        if (!parents[p]) parents[p] = [];
+        parents[p].push({ round: round.round, date: round.date, role });
+      });
+    });
+  });
+
+  const sortedParents = Object.keys(parents).sort();
+  const matchingParents = searchTerm
+    ? sortedParents.filter(p => p.toLowerCase().includes(searchTerm) || parents[p].some(a => a.role.toLowerCase().includes(searchTerm)))
+    : sortedParents;
+
+  if (!matchingParents.length) { el.innerHTML = '<div class="no-results">No results found.</div>'; return; }
+
+  el.innerHTML = '<div class="parents-grid" id="parentsGrid"></div>';
+  const grid = document.getElementById('parentsGrid');
+
+  matchingParents.forEach(name => {
+    const assignments = parents[name];
+    const initials = name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+    const card = document.createElement('div');
+    card.className = 'parent-card';
+    const rolesHtml = assignments.map(a => `
+      <div class="parent-role-item">
+        <div class="role-pill" title="${a.role}">${hl(a.role)}</div>
+        <div class="date-chip">${a.round} · ${a.date}</div>
+      </div>
+    `).join('');
+    card.innerHTML = `
+      <div class="parent-header">
+        <div class="parent-avatar">${initials}</div>
+        <div class="parent-name">${hl(name)}</div>
+        <div class="role-count">${assignments.length}</div>
+      </div>
+      <div class="parent-roles-list">${rolesHtml}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderRole(el, filtered) {
+  const roles = {};
+  filtered.forEach(round => {
+    Object.entries(round.roles).forEach(([role, person]) => {
+      if (!roles[role]) roles[role] = [];
+      roles[role].push({ round: round.round, date: round.date, person });
+    });
+  });
+
+  const matchingRoles = Object.keys(roles).filter(r =>
+    !searchTerm || r.toLowerCase().includes(searchTerm) ||
+    roles[r].some(a => a.person.toLowerCase().includes(searchTerm))
+  );
+
+  if (!matchingRoles.length) { el.innerHTML = '<div class="no-results">No results found.</div>'; return; }
+
+  el.innerHTML = '<div class="roles-list-view" id="rolesListView"></div>';
+  const list = document.getElementById('rolesListView');
+
+  matchingRoles.forEach(role => {
+    const section = document.createElement('div');
+    section.className = 'role-section';
+    const chipsHtml = roles[role].map(a => `
+      <div class="assignment-chip">
+        <span class="r-num">${a.round}</span>
+        <span>${hl(a.person)}</span>
+        <span style="color:var(--muted);font-size:0.75rem">· ${a.date}</span>
+      </div>
+    `).join('');
+    section.innerHTML = `
+      <div class="role-section-header">${hl(role)}</div>
+      <div class="role-assignments">${chipsHtml}</div>
+    `;
+    list.appendChild(section);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
